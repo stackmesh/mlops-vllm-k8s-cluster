@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: inference
+  labels:
+    app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+    kubernetes.io/metadata.name: inference

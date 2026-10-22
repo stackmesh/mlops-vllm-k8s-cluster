@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: inference
+resources:
+  - namespace.yaml
+  - priorityclasses.yaml
+  - resourcequota.yaml
+  - limitrange.yaml
+  - networkpolicy.yaml
+  - qdrant.yaml
+  - mlflow.yaml
+  - triton.yaml
+  - gateway.yaml

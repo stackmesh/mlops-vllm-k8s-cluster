@@ -1,0 +1,6 @@
+FROM nvcr.io/nvidia/tritonserver:24.12-pyt-python-py3
+
+COPY src /opt/mlops/src
+COPY triton/model_repository /models
+
+ENV PYTHONPATH=/opt/mlops/src

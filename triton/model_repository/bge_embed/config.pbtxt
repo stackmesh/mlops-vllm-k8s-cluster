@@ -1,0 +1,31 @@
+name: "bge_embed"
+backend: "python"
+max_batch_size: 32
+
+input [
+  {
+    name: "TEXT"
+    data_type: TYPE_STRING
+    dims: [ 1 ]
+  }
+]
+
+output [
+  {
+    name: "EMBEDDING"
+    data_type: TYPE_FP32
+    dims: [ 384 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 8, 16 ]
+  max_queue_delay_microseconds: 2000
+}
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_CPU
+  }
+]

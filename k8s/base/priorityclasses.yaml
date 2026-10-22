@@ -1,0 +1,17 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: inference-latency
+value: 1000000
+preemptionPolicy: PreemptLowerPriority
+globalDefault: false
+description: Interactive LLM serving. May preempt batch embedding pods.
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: inference-batch
+value: 10000
+preemptionPolicy: Never
+globalDefault: false
+description: Embeddings, registry, and other batch work.

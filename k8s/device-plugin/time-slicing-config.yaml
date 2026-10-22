@@ -1,0 +1,16 @@
+# Apply only for a plan whose strategy is time_slice. MIG labs should not
+# combine this ConfigMap with mixed MIG on the same device.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nvidia-device-plugin-config
+  namespace: kube-system
+data:
+  config.yaml: |
+    version: v1
+    sharing:
+      timeSlicing:
+        renameByDefault: false
+        resources:
+          - name: nvidia.com/gpu
+            replicas: 4

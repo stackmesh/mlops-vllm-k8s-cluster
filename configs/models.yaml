@@ -1,0 +1,51 @@
+# Geometry is the public model card (layers, KV heads, head dim, parameter count).
+# KV cache is reserved for the full configured concurrency so a pod cannot
+# advertise a batch size it cannot pay for.
+# repo_verified lists quants whose Hugging Face id is the matching checkpoint.
+models:
+  tinyllama-1.1b-chat:
+    params_b: 1.1
+    n_layers: 22
+    n_kv_heads: 4
+    head_dim: 64
+    max_model_len: 2048
+    max_num_seqs: 8
+    repo: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+    repos: {}
+  qwen2.5-7b-instruct:
+    params_b: 7.61
+    n_layers: 28
+    n_kv_heads: 4
+    head_dim: 128
+    max_model_len: 4096
+    max_num_seqs: 16
+    repo: Qwen/Qwen2.5-7B-Instruct
+    repos:
+      awq: Qwen/Qwen2.5-7B-Instruct-AWQ
+  llama-3.1-8b-instruct:
+    params_b: 8.03
+    n_layers: 32
+    n_kv_heads: 8
+    head_dim: 128
+    max_model_len: 4096
+    max_num_seqs: 16
+    repo: meta-llama/Meta-Llama-3.1-8B-Instruct
+    repos: {}
+  mistral-7b-instruct:
+    params_b: 7.25
+    n_layers: 32
+    n_kv_heads: 8
+    head_dim: 128
+    max_model_len: 4096
+    max_num_seqs: 16
+    repo: mistralai/Mistral-7B-Instruct-v0.3
+    repos: {}
+  llama-3.1-70b-instruct:
+    params_b: 70.6
+    n_layers: 80
+    n_kv_heads: 8
+    head_dim: 128
+    max_model_len: 4096
+    max_num_seqs: 8
+    repo: meta-llama/Meta-Llama-3.1-70B-Instruct
+    repos: {}

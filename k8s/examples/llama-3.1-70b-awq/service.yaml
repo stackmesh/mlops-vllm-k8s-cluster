@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-llama-3-1-70b-instruct
+  namespace: inference
+  labels:
+    app.kubernetes.io/name: vllm-llama-3-1-70b-instruct
+    app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+    app.kubernetes.io/component: llm
+    mlops.stackmesh/quant: awq
+    mlops.stackmesh/strategy: dedicated
+spec:
+  selector:
+    app.kubernetes.io/name: vllm-llama-3-1-70b-instruct
+  ports:
+  - name: http
+    port: 8000
+    targetPort: http

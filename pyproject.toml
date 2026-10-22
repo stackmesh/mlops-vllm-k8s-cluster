@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlops-vllm-k8s-cluster"
+version = "0.1.0"
+description = "High-throughput, low-latency model inference platform. Automates multi-node GPU slicing and open-source LLM deployments inside a local Kubernetes cluster under strict compute budgets."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "stackmesh" }]
+keywords = [
+  "kubernetes",
+  "vllm",
+  "triton",
+  "mlflow",
+  "airflow",
+  "pytorch",
+  "qdrant",
+  "mlops",
+]
+dependencies = [
+  "fastapi>=0.115",
+  "httpx>=0.27",
+  "pydantic>=2",
+  "pyyaml>=6",
+  "qdrant-client>=1.12",
+  "uvicorn>=0.32",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+torch = ["torch>=2.2"]
+
+[project.scripts]
+mlops-cluster = "mlops_cluster.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+  "ignore:Using `httpx` with `starlette.testclient`:starlette.exceptions.StarletteDeprecationWarning",
+]

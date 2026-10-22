@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-llama-3-1-70b-instruct
+  namespace: inference
+  labels:
+    app.kubernetes.io/name: vllm-llama-3-1-70b-instruct
+    app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+    app.kubernetes.io/component: llm
+    mlops.stackmesh/quant: awq
+    mlops.stackmesh/strategy: dedicated
+  annotations:
+    mlops.stackmesh/reason: Placed 1 replica of llama-3.1-70b-instruct (awq) via dedicated
+      on 2 physical GPUs, 80.0 GiB reserved. Checkpoint meta-llama/Meta-Llama-3.1-70B-Instruct
+      is the unquantized repo; set the AWQ checkpoint before apply.
+    mlops.stackmesh/reserved-vram-gib: '80.00'
+    mlops.stackmesh/pools: node-a
+    mlops.stackmesh/repo-matches-quant: 'false'
+    mlops.stackmesh/cross-node: 'false'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vllm-llama-3-1-70b-instruct
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vllm-llama-3-1-70b-instruct
+        app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+        app.kubernetes.io/component: llm
+        mlops.stackmesh/quant: awq
+        mlops.stackmesh/strategy: dedicated
+      annotations:
+        mlops.stackmesh/reason: Placed 1 replica of llama-3.1-70b-instruct (awq) via
+          dedicated on 2 physical GPUs, 80.0 GiB reserved. Checkpoint meta-llama/Meta-Llama-3.1-70B-Instruct
+          is the unquantized repo; set the AWQ checkpoint before apply.
+        mlops.stackmesh/reserved-vram-gib: '80.00'
+        mlops.stackmesh/pools: node-a
+        mlops.stackmesh/repo-matches-quant: 'false'
+        mlops.stackmesh/cross-node: 'false'
+    spec:
+      priorityClassName: inference-latency
+      containers:
+      - name: vllm
+        image: vllm/vllm-openai:v0.32.0
+        imagePullPolicy: IfNotPresent
+        args:
+        - --model
+        - meta-llama/Meta-Llama-3.1-70B-Instruct
+        - --served-model-name
+        - llama-3.1-70b-instruct
+        - --tensor-parallel-size
+        - '2'
+        - --pipeline-parallel-size
+        - '1'
+        - --gpu-memory-utilization
+        - '0.9000'
+        - --max-model-len
+        - '4096'
+        - --max-num-seqs
+        - '8'
+        - --dtype
+        - auto
+        - --quantization
+        - awq
+        ports:
+        - name: http
+          containerPort: 8000
+        resources:
+          requests:
+            cpu: '4'
+            memory: 42Gi
+            nvidia.com/gpu: '2'
+          limits:
+            cpu: '8'
+            memory: 50Gi
+            nvidia.com/gpu: '2'
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          periodSeconds: 10
+          failureThreshold: 90
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          periodSeconds: 10
+          failureThreshold: 3

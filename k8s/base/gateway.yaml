@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: inference
+  labels:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/part-of: mlops-vllm-k8s-cluster
+        app.kubernetes.io/component: gateway
+    spec:
+      priorityClassName: inference-latency
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: gateway
+          image: mlops-gateway:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: MLOPS_CONFIG_DIR
+              value: /app/configs
+            - name: QDRANT_URL
+              value: http://qdrant:6333
+            - name: MLFLOW_TRACKING_URI
+              value: http://mlflow:5000
+            - name: EMBEDDING_BACKEND
+              value: python
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: inference
+spec:
+  selector:
+    app.kubernetes.io/name: gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

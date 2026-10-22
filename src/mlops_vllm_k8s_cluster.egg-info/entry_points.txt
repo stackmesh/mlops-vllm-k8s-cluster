@@ -1,0 +1,2 @@
+[console_scripts]
+mlops-cluster = mlops_cluster.cli:main

@@ -1,0 +1,28 @@
+# Local two-node lab. Four A100-40GB devices are installed; the budget
+# releases only two of them and 80 GiB of VRAM. MIG profile capacities match
+# nvidia-smi on A100-SXM4-40GB (NVIDIA MIG User Guide, GPU instance table).
+name: lab-k3s
+budget:
+  max_physical_gpus: 2
+  max_vram_gib: 80
+  max_replicas: 4
+  gpu_memory_utilization: 0.90
+  weight_overhead: 1.15
+  max_time_slice_per_gpu: 4
+pools:
+  - name: node-a
+    sku: a100-40gb
+    nodes: 1
+    gpus_per_node: 2
+    mig_enabled: true
+  - name: node-b
+    sku: a100-40gb
+    nodes: 1
+    gpus_per_node: 2
+    mig_enabled: true
+images:
+  vllm: vllm/vllm-openai:v0.32.0
+  triton: nvcr.io/nvidia/tritonserver:24.12-pyt-python-py3
+  gateway: mlops-gateway:local
+  qdrant: qdrant/qdrant:v1.13.4
+  mlflow: ghcr.io/mlflow/mlflow:v2.19.0
