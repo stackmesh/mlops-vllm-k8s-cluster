@@ -6,12 +6,6 @@ The lab in [`configs/cluster.yaml`](configs/cluster.yaml) has four A100-40GB GPU
 
 **Stack:** Kubernetes, vLLM, Triton Inference Server, MLflow, Airflow, PyTorch, Qdrant.
 
-Paste this into the GitHub About description:
-
-> A high-throughput, low-latency model inference platform. Automates multi-node GPU slicing and open-source LLM deployments inside a local Kubernetes cluster under strict compute budgets.
-
-Topics: `kubernetes` `mlops` `vllm` `triton-inference-server` `mlflow` `airflow` `pytorch` `qdrant`
-
 ## Architecture
 
 ```mermaid
